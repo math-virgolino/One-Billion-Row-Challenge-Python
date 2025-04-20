@@ -3,6 +3,9 @@ import sys
 import random
 import time
 
+"""
+Este código tem a finalidade de gerar o arquivo que será usado na análise
+"""
 
 def check_args(file_args):
     """
@@ -20,7 +23,9 @@ def check_args(file_args):
 
 def build_weather_station_name_list():
     """
-    Grabs the weather station names from example data provided in repo and dedups
+    Lê o weather_statitions.csv 
+    Extrai os nomes das estações
+    Retorna uma lista sem duplicatas
     """
     station_names = []
     with open('./data/weather_stations.csv', 'r', encoding="utf-8") as file:
@@ -35,7 +40,7 @@ def build_weather_station_name_list():
 
 def convert_bytes(num):
     """
-    Convert bytes to a human-readable format (e.g., KiB, MiB, GiB)
+    Converte bytes para unidades mais legíveis ao olho humano (e.g., KiB, MiB, GiB)
     """
     for x in ['bytes', 'KiB', 'MiB', 'GiB']:
         if num < 1024.0:
@@ -45,7 +50,8 @@ def convert_bytes(num):
 
 def format_elapsed_time(seconds):
     """
-    Format elapsed time in a human-readable format
+    Tempo decorrido de fácil leitura
+    Será usado na função que gera o arquivo measurements.txt
     """
     if seconds < 60:
         return f"{seconds:.3f} seconds"
@@ -63,7 +69,7 @@ def format_elapsed_time(seconds):
 
 def estimate_file_size(weather_station_names, num_rows_to_create):
     """
-    Tries to estimate how large a file the test data will be
+    Tenta estimar quão grande será o arquivo de teste(mesurements.txt)
     """
     max_string = float('-inf')
     min_string = float('inf')
@@ -85,13 +91,13 @@ def estimate_file_size(weather_station_names, num_rows_to_create):
 
 def build_test_data(weather_station_names, num_rows_to_create):
     """
-    Generates and writes to file the requested length of test data
+    Gera e grava no arquivo o comprimento solicitado dos dados de teste 
     """
     start_time = time.time()
     coldest_temp = -99.9
     hottest_temp = 99.9
     station_names_10k_max = random.choices(weather_station_names, k=10_000)
-    batch_size = 10000 # instead of writing line by line to file, process a batch of stations and put it to disk
+    batch_size = 10000 # Ao invés de gerar o arquivo completo de uma só vez, gera em lotes(batches)
     progress_step = max(1, (num_rows_to_create // batch_size) // 100)
     print('Criando o arquivo... isso vai demorar uns 10 minutos...')
 
@@ -123,7 +129,7 @@ def main():
     """
     main program function
     """
-    num_rows_to_create = 1000000
+    num_rows_to_create = 1_000_000_000
     weather_station_names = []
     weather_station_names = build_weather_station_name_list()
     print(estimate_file_size(weather_station_names, num_rows_to_create))
