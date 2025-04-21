@@ -29,56 +29,39 @@ O desafio é desenvolver um programa Python capaz de ler esse arquivo e calcular
 |--------------|-----------------|------------------|-----------------|
 | Abha         | -31.1           | 18.0             | 66.5            |
 | Abidjan      | -25.9           | 26.0             | 74.6            |
-| Abéché       | -19.8           | 29.4             | 79.9            |
-| Accra        | -24.8           | 26.4             | 76.3            |
-| Addis Ababa  | -31.8           | 16.0             | 63.9            |
-| Adelaide     | -31.8           | 17.3             | 71.5            |
-| Aden         | -19.6           | 29.1             | 78.3            |
-| Ahvaz        | -24.0           | 25.4             | 72.6            |
 | Albuquerque  | -35.0           | 14.0             | 61.9            |
 | Alexandra    | -40.1           | 11.0             | 67.9            |
 | ...          | ...             | ...              | ...             |
 | Yangon       | -23.6           | 27.5             | 77.3            |
 | Yaoundé      | -26.2           | 23.8             | 73.4            |
 | Yellowknife  | -53.4           | -4.3             | 46.7            |
-| Yerevan      | -38.6           | 12.4             | 62.8            |
-| Yinchuan     | -45.2           | 9.0              | 56.9            |
-| Zagreb       | -39.2           | 10.7             | 58.1            |
-| Zanzibar City| -26.5           | 26.0             | 75.2            |
 | Zürich       | -42.0           | 9.3              | 63.6            |
 | Ürümqi       | -42.1           | 7.4              | 56.7            |
 | İzmir        | -34.4           | 17.9             | 67.9            |
 
-## Dependências
-
-Para executar os scripts deste projeto, você precisará das seguintes bibliotecas:
+Este desafio será em torno das bibliotecas:
 
 * Polars: `0.20.3`
 * DuckDB: `0.10.0`
 * Dask[complete]: `^2024.2.0`
 
-## Resultados
+## Resultados dos Testes
 
-Os testes foram realizados em um laptop equipado com um processador M1 da Apple e 8GB de RAM. As implementações utilizaram abordagens puramente Python, Pandas, Dask, Polars e DuckDB. Os resultados de tempo de execução para processar o arquivo de 1 bilhão de linhas são apresentados abaixo:
+Os testes foram realizados em um laptop equipado com um processador Intel i5 Gen8 e 8Gb RAM. As implementações utilizaram abordagens puramente Python, Pandas, Dask, Polars e DuckDB. Os resultados de tempo de execução para processar o arquivo de 1 bilhão de linhas são apresentados abaixo:
 
 | Implementação | Tempo |
 | --- | --- |
-| Bash + awk | 25 minutos |
-| Python | 20 minutos |
-| Python + Pandas | 263 sec |
+| Python | 48 minutos |
+| Python + Pandas | 759.77 sec |
 | Python + Dask | 155.62 sec  |
-| Python + Polars | 33.86 sec |
-| Python + Duckdb | 14.98 sec |
-
-Obrigado por [Koen Vossen](https://github.com/koenvo) pela implementação em Polars e [Arthur Julião](https://github.com/ArthurJ) pela implementação em Python e Bash 
+| Python + Polars | 77.74 sec |
+| Python + Duckdb | 52.31 sec |
 
 ## Conclusão
 
-Este desafio destacou claramente a eficácia de diversas bibliotecas Python na manipulação de grandes volumes de dados. Métodos tradicionais como Bash (25 minutos), Python puro (20 minutos) e até mesmo o Pandas (5 minutos) demandaram uma série de táticas para implementar o processamento em "lotes", enquanto bibliotecas como Dask, Polars e DuckDB provaram ser excepcionalmente eficazes, requerendo menos linhas de código devido à sua capacidade inerente de distribuir os dados em "lotes em streaming" de maneira mais eficiente. O DuckDB se sobressaiu, alcançando o menor tempo de execução graças à sua estratégia de execução e processamento de dados.
+Este desafio destacou claramente a eficácia de diversas bibliotecas Python na manipulação de grandes volumes de dados. Métodos tradicionais Python puro (48 minutos) e até mesmo o Pandas (12 minutos) demandaram uma série de táticas para implementar o processamento em "lotes", enquanto bibliotecas como Dask, Polars e DuckDB provaram ser excepcionalmente eficazes, requerendo menos linhas de código e  sua capacidade inerente de distribuir os dados em "lotes em streaming" de maneira mais eficiente. O DuckDB se sobressaiu, alcançando o menor tempo de execução graças à sua estratégia de execução e processamento de dados.
 
 Esses resultados enfatizam a importância de selecionar a ferramenta adequada para análise de dados em larga escala, demonstrando que Python, com as bibliotecas certas, é uma escolha poderosa para enfrentar desafios de big data.
-
-Duckdb vence tambem com 1 milhao de linhas, realmente é o melhor
 
 ## Como Executar
 
@@ -88,68 +71,81 @@ Para executar este projeto e reproduzir os resultados:
 2. Definir a versao do Python usando o `pyenv local 3.12.1`
 2. `poetry env use 3.12.1`, `poetry install --no-root` e `poetry lock --no-update`
 3. Execute o comando `python src/create_measurements.py` para gerar o arquivo de teste
-4. Tenha paciência e vá fazer um café, vai demorar uns 10 minutos para gerar o arquivo
-5. Certifique-se de instalar as versões especificadas das bibliotecas Dask, Polars e DuckDB
-6. Execute os scripts `python src/using_python.py`, `python src/using_pandas.py`, `python src/using_dask.py`, `python src/using_polars.py` e `python src/using_duckdb.py` através de um terminal ou ambiente de desenvolvimento que suporte Python.
+4. Tenha paciência e vá fazer um café, vai demorar uns 15 minutos para gerar o arquivo
+5. Execute os scripts `poetry run python src/using_python.py`, `poetry run python src/using_pandas.py`, `poetry run python src/using_dask.py`, `poetry run python src/using_polars.py` e `poetry run python src/using_duckdb.py` através de um terminal ou ambiente de desenvolvimento que suporte Python.
 
 Este projeto destaca a versatilidade do ecossistema Python para tarefas de processamento de dados, oferecendo valiosas lições sobre escolha de ferramentas para análises em grande escala.
 
-## Bonus
+## Características de Cada Biblioteca
 
-Para rodar o script Bash descrito, você precisa seguir alguns passos simples. Primeiro, assegure-se de que você tenha um ambiente Unix-like, como Linux ou macOS, que suporta scripts Bash nativamente. Além disso, verifique se as ferramentas utilizadas no script (`wc`, `head`, `pv`, `awk`, e `sort`) estão instaladas em seu sistema. A maioria dessas ferramentas vem pré-instalada em sistemas Unix-like, mas `pv` (Pipe Viewer) pode precisar ser instalado manualmente.
+### Pandas
+Como funciona:
+* Pandas usa NumPy por baixo dos panos, armazenando os dados em arrays na RAM
+* Cada coluna é um Series, que é basicamente um array tipado
+* Todas as operações são monothreaded (rodam em um núcleo apenas)
+* Não faz lazy evaluation: tudo roda imediatamente.
 
-### Instalando o Pipe Viewer (pv)
+Ideal para: 
+* Pequenos dados (cabem na RAM)
 
-Se você não tem o `pv` instalado, pode facilmente instalá-lo usando o gerenciador de pacotes do seu sistema. Por exemplo:
+Motivo:
+* Simples, leve e direto. É perfeito para análises exploratórias, protótipos rápidos e pequenos datasets
+* Sua API é muito madura e intuitiva, o que facilita a vida no dia a dia
 
-* No Ubuntu/Debian:
-    
-    ```bash
-    sudo apt-get update
-    sudo apt-get install pv
-    ```
-    
-* No macOS (usando [Homebrew](https://brew.sh/)):
-    
-    ```bash
-    brew install pv
-    ```
-    
-### Preparando o Script
+Limite técnico:
+* Dependendo de cada máquina, mas se você tem 8Gb RAM e se seu DataFrame tem ~500k a 1M de linhas e você tenta um groupby, ele pode travar ou estourar memória. Observação: Lembrando que também existe a questão de quantidades de colunas do DataFrame
 
-1. Dê permissão de execução para o arquivo script. Abra um terminal e execute:
-    
-    ```bash
-    chmod +x process_measurements.sh
-    ```
+### DuckDB
+Como funciona:
+* É um motor de banco de dados OLAP embutido, otimizado para consultas analíticas colunarizadas
+* Lê e escreve formato Parquet diretamente, com scan incremental (sem carregar tudo na RAM)
+* Usa multi-threading com query planner e otimizador de execução como bancos de dados sérios
+* Suporta SQL ANSI, inclusive subqueries, CTEs, joins complexos etc
 
-2. Rode o script. Abra um terminal e execute:
-   
-   ```bash
-   ./src/using_bash_and_awk.sh 1000
-   ```
+Ideal para:
+OLAP com SQL, e dados grandes que não cabem na memória
 
-Neste exemplo, apenas as primeiras 1000 linhas serão processadas.
+Motivo:
+* Pode rodar queries em datasets de centenas de milhões de linhas sem carregar tudo na RAM
+* Excelente para times acostumados com SQL, e quando o dado está armazenado em arquivos como .parquet, .csv, ou até no Amazon S3
 
-Ao executar o script, você verá a barra de progresso (se pv estiver instalado corretamente) e, eventualmente, a saída esperada no terminal ou em um arquivo de saída, se você decidir modificar o script para direcionar a saída.
+Limite técnico:
+* Não tem API pandas-style. É SQL puro (ou .df() para converter o resultado), então pode não ser ideal se você quer manipular os dados linha por linha ou fazer coisas muito customizadas
 
-## Próximos passos
+### Polars
+Como funciona:
+* Feito em Rust, super rápido e seguro, com bindings para Python
+* Usa executores vetorizados (colunas processadas em blocos) e multi-threading nativo
+* Pode operar em dois modos:
+** Eager (modo imediato) — parecido com Pandas
+**Lazy (modo preguiçoso) — compila todo o pipeline de operações e executa só no final, otimizando tudo (como um query planner)
 
-Esse projeto faz parte da *Jornada de Dados*
-Nossa missão é fornecer o melhor ensino em engenharia de dados
+Ideal para
+* Grandes dados em memória e processamento super rápido
 
-Se você quer:
+Motivo:
+* É muito mais eficiente que Pandas, especialmente com filtros, joins e agregações complexas
+* Lazy evaluation permite otimizações automáticas (ex: elimina colunas não usadas)
 
-- Aprender sobre Duckdb e engenharia de dados
-- Construir uma base sólida em Python e SQL
-- Criar ou melhorar seu portfólio de dados
-- Criar ou aumentar o seu networking na área
-- Mudar ou dar o próximo passo em sua carreira
+Limite técnico:
+* Ainda não tão “amigável” quanto Pandas para quem está começando.
+* Algumas operações ainda estão sendo desenvolvidas (tipo merge complexos ou funções personalizadas)
 
-A Jornada de Dados é o seu lugar
+### Dask
+Como funciona:
+* Cria gráficos de tarefas paralelas (DAGs) para operações com dados
+* Divide grandes DataFrames em partições menores e processa cada uma em paralelo, podendo escalar para clusters
+* API é parecida com Pandas, mas as operações são lazy, ou seja, não executam até o .compute()
 
-[![Imagem](https://github.com/lvgalvao/data-engineering-roadmap/raw/main/pics/jornada.png)](https://www.jornadadedados2024.com.br/workshops)
+Ideal para: 
+* Escalar análise de dados para além da RAM, ou para múltiplas máquinas
 
-Para entrar na lista de espera clique no botao
+Motivo:
+* Você pode trabalhar com dados maiores que a RAM, já que ele processa em blocos
+* Também pode conectar com Hadoop/Spark, usar com AWS/GCP, etc
+* Ótimo para pipelines e automações
 
-[![Imagem](https://raw.githubusercontent.com/lvgalvao/data-engineering-roadmap/main/pics/lista_de_espera.png)](https://forms.gle/hJMtRDP3MPBUGvwS7?orbt_src=orbt-vst-1RWyYmpICDu9gPknLgaD)# One-Billion-Row-Challenge-Python
+🔎 Limite técnico:
+* Nem toda operação é compatível com Pandas 100%
+* Performance pode ser menor que Polars ou DuckDB em casos simples
+* Curva de aprendizado maior
