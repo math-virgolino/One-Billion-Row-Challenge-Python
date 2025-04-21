@@ -145,7 +145,7 @@ Motivo:
 * Também pode conectar com Hadoop/Spark, usar com AWS/GCP, etc
 * Ótimo para pipelines e automações
 
-🔎 Limite técnico:
+Limite técnico:
 * Nem toda operação é compatível com Pandas 100%
 * Performance pode ser menor que Polars ou DuckDB em casos simples
 * Curva de aprendizado maior
