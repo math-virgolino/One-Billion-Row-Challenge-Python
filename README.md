@@ -103,7 +103,7 @@ Como funciona:
 * Suporta SQL ANSI, inclusive subqueries, CTEs, joins complexos etc
 
 Ideal para:
-OLAP com SQL, e dados grandes que não cabem na memória
+* OLAP com SQL, e dados grandes que não cabem na memória
 
 Motivo:
 * Pode rodar queries em datasets de centenas de milhões de linhas sem carregar tudo na RAM
