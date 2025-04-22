@@ -7,6 +7,7 @@ import time
 Este código tem a finalidade de gerar o arquivo que será usado na análise
 """
 
+
 def check_args(file_args):
     """
     Sanity checks out input and prints out usage if input is not a positive integer
@@ -15,23 +16,23 @@ def check_args(file_args):
         if len(file_args) != 2 or int(file_args[1]) <= 0:
             raise Exception()
     except:
-        print("Usage:  create_measurements.sh <positive integer number of records to create>")
-        print("        You can use underscore notation for large number of records.")
-        print("        For example:  1_000_000_000 for one billion")
+        print('Usage:  create_measurements.sh <positive integer number of records to create>')
+        print('        You can use underscore notation for large number of records.')
+        print('        For example:  1_000_000_000 for one billion')
         exit()
 
 
 def build_weather_station_name_list():
     """
-    Lê o weather_statitions.csv 
+    Lê o weather_statitions.csv
     Extrai os nomes das estações
     Retorna uma lista sem duplicatas
     """
     station_names = []
-    with open('./data/weather_stations.csv', 'r', encoding="utf-8") as file:
+    with open('./data/weather_stations.csv', 'r', encoding='utf-8') as file:
         file_contents = file.read()
     for station in file_contents.splitlines():
-        if "#" in station:
+        if '#' in station:
             next
         else:
             station_names.append(station.split(';')[0])
@@ -44,7 +45,7 @@ def convert_bytes(num):
     """
     for x in ['bytes', 'KiB', 'MiB', 'GiB']:
         if num < 1024.0:
-            return "%3.1f %s" % (num, x)
+            return '%3.1f %s' % (num, x)
         num /= 1024.0
 
 
@@ -54,17 +55,17 @@ def format_elapsed_time(seconds):
     Será usado na função que gera o arquivo measurements.txt
     """
     if seconds < 60:
-        return f"{seconds:.3f} seconds"
+        return f'{seconds:.3f} seconds'
     elif seconds < 3600:
         minutes, seconds = divmod(seconds, 60)
-        return f"{int(minutes)} minutes {int(seconds)} seconds"
+        return f'{int(minutes)} minutes {int(seconds)} seconds'
     else:
         hours, remainder = divmod(seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
         if minutes == 0:
-            return f"{int(hours)} hours {int(seconds)} seconds"
+            return f'{int(hours)} hours {int(seconds)} seconds'
         else:
-            return f"{int(hours)} hours {int(minutes)} minutes {int(seconds)} seconds"
+            return f'{int(hours)} hours {int(minutes)} minutes {int(seconds)} seconds'
 
 
 def estimate_file_size(weather_station_names, num_rows_to_create):
@@ -74,55 +75,60 @@ def estimate_file_size(weather_station_names, num_rows_to_create):
     max_string = float('-inf')
     min_string = float('inf')
     per_record_size = 0
-    record_size_unit = "bytes"
+    record_size_unit = 'bytes'
 
     for station in weather_station_names:
         if len(station) > max_string:
             max_string = len(station)
         if len(station) < min_string:
             min_string = len(station)
-        per_record_size = ((max_string + min_string * 2) + len(",-123.4")) / 2
+        per_record_size = ((max_string + min_string * 2) + len(',-123.4')) / 2
 
     total_file_size = num_rows_to_create * per_record_size
     human_file_size = convert_bytes(total_file_size)
 
-    return f"O tamanho estimado do arquivo é:  {human_file_size}.\nO tamanho final será provavelmente muito menor (metade)."
+    return f'O tamanho estimado do arquivo é:  {human_file_size}.\nO tamanho final será provavelmente muito menor (metade).'
 
 
 def build_test_data(weather_station_names, num_rows_to_create):
     """
-    Gera e grava no arquivo o comprimento solicitado dos dados de teste 
+    Gera e grava no arquivo o comprimento solicitado dos dados de teste
     """
     start_time = time.time()
     coldest_temp = -99.9
     hottest_temp = 99.9
     station_names_10k_max = random.choices(weather_station_names, k=10_000)
-    batch_size = 10000 # Ao invés de gerar o arquivo completo de uma só vez, gera em lotes(batches)
+    batch_size = 10000   # Ao invés de gerar o arquivo completo de uma só vez, gera em lotes(batches)
     progress_step = max(1, (num_rows_to_create // batch_size) // 100)
     print('Criando o arquivo... isso vai demorar uns 10 minutos...')
 
     try:
-        with open("./data/measurements.txt", 'w', encoding="utf-8") as file:
-            for s in range(0,num_rows_to_create // batch_size):
-                
+        with open('./data/measurements.txt', 'w', encoding='utf-8') as file:
+            for s in range(0, num_rows_to_create // batch_size):
+
                 batch = random.choices(station_names_10k_max, k=batch_size)
-                prepped_deviated_batch = '\n'.join([f"{station};{random.uniform(coldest_temp, hottest_temp):.1f}" for station in batch]) # :.1f should quicker than round on a large scale, because round utilizes mathematical operation
+                prepped_deviated_batch = '\n'.join(
+                    [
+                        f'{station};{random.uniform(coldest_temp, hottest_temp):.1f}'
+                        for station in batch
+                    ]
+                )   # :.1f should quicker than round on a large scale, because round utilizes mathematical operation
                 file.write(prepped_deviated_batch + '\n')
-                
+
         sys.stdout.write('\n')
     except Exception as e:
-        print("Something went wrong. Printing error info and exiting...")
+        print('Something went wrong. Printing error info and exiting...')
         print(e)
         exit()
-    
+
     end_time = time.time()
     elapsed_time = end_time - start_time
-    file_size = os.path.getsize("./data/measurements.txt")
+    file_size = os.path.getsize('./data/measurements.txt')
     human_file_size = convert_bytes(file_size)
- 
-    print("Arquivo escrito com sucesso data/measurements.txt")
-    print(f"Tamanho final:  {human_file_size}")
-    print(f"Tempo decorrido: {format_elapsed_time(elapsed_time)}")
+
+    print('Arquivo escrito com sucesso data/measurements.txt')
+    print(f'Tamanho final:  {human_file_size}')
+    print(f'Tempo decorrido: {format_elapsed_time(elapsed_time)}')
 
 
 def main():
@@ -134,9 +140,9 @@ def main():
     weather_station_names = build_weather_station_name_list()
     print(estimate_file_size(weather_station_names, num_rows_to_create))
     build_test_data(weather_station_names, num_rows_to_create)
-    print("Arquivo de teste finalizado.")
+    print('Arquivo de teste finalizado.')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
 exit()
